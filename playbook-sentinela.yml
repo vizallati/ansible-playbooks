@@ -1,0 +1,25 @@
+---
+- name: Update web servers
+  hosts: blog.vizallati.guru
+  become: true
+  tasks:
+  - name: Check for cloned project dir
+    stat:
+      path: /opt/sentinela
+    register: project_dir
+  - name: Move cloned project repo
+    copy:
+      src: /tmp/sentinela
+      dest: /opt
+    when:
+      not project_dir.stat.exists
+  - name: Grant permission to installation script
+    file:
+      path: /opt/sentinela/install.sh
+      mode: '0755'
+  - name: Install service
+    command: sh /opt/sentinela/install.sh
+    register: installation_output
+  - name: Print out installation output
+    debug:
+      msg: "{{ installation_output.stdout}}"
