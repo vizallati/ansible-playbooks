@@ -1,5 +1,5 @@
 ---
-- name: Update web servers
+- name: Deploy systemd-sentinela service
   hosts: blog.vizallati.guru
   become: true
   tasks:
